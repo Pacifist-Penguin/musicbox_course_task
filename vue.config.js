@@ -1,3 +1,1 @@
-module.exports = {
-  ENV: "code",
-};
+module.exports = {};
