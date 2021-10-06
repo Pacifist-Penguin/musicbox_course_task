@@ -7,10 +7,10 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import "./assets/tailwind.css";
 import "./assets/main.css";
 
-let appMounted = false
-const auth = getAuth()
+let appMounted = false;
+const auth = getAuth();
 onAuthStateChanged(auth, () => {
-    if (!appMounted) {
-        createApp(App).use(store).use(router).use(VeeValidatePlugin).mount("#app");
-    }
-})
+	if (!appMounted) {
+		createApp(App).use(store).use(router).use(VeeValidatePlugin).mount("#app");
+	}
+});
