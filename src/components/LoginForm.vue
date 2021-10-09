@@ -74,15 +74,23 @@ export default {
 		};
 	},
 	methods: {
-		login() {
+		async login(values) {
 			this.login_in_submission = true;
 			this.login_show_alert = true;
 			//This variable wouldnt be necessary if we didnt want to notify user about sucessfull log in
 			this.login_alert_variant = "bg-blue-500";
 			this.login_alert_msg = "Logging in...";
+			try {
+				await this.$store.dispatch("login", values);
+			} catch {
+				console.log("totobad");
+				this.login_alert_variant = "bg-red-500";
+				(this.login_in_submission = false), (this.login_alert_msg = "Error occured!!");
+				return;
+			}
 			//THE FOLLOWING CODE SHOULD ONLY
 			//EXECUTE IF LOG IN IS SUBMITTED
-			this.login_alert_variant = "bg-green-500";
+			(this.login_in_submission = false), (this.login_alert_variant = "bg-green-500");
 			this.login_alert_msg = "Logged in!";
 		},
 	},
