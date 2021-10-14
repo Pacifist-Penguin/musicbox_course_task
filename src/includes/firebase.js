@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import "firebase/auth";
 import { getFirestore, collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { firebaseConfig } from "./firebaseConfig.js"; // Created only to be placed in .gitignore
-
+import { getStorage } from "firebase/storage";
 const firebase = initializeApp(firebaseConfig);
 const db = getFirestore(firebase);
 const getUsersCollection = () => {
@@ -16,6 +16,7 @@ const getUsersCollection = () => {
 	);
 	return actualDoc;
 };
+const storage = getStorage(firebase);
 /*Input will be like this
 {
   name: "name",
@@ -31,4 +32,4 @@ const addUsersCollection = (usersData, key = usersData.email) => {
 	});
 };
 
-export { getUsersCollection, addUsersCollection };
+export { getUsersCollection, addUsersCollection, storage };
