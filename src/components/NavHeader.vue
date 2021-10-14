@@ -29,7 +29,7 @@
 							<router-link class="px-2 text-white" :to="{ name: 'manage' }">Manage</router-link>
 						</li>
 						<li>
-							<a class="px-2 text-white" href="#">logout</a>
+							<a @click.prevent="signOut" class="px-2 text-white" href="#">Logout</a>
 						</li>
 					</template>
 				</ul>
@@ -46,7 +46,7 @@ export default {
 	methods: {
 		...mapMutations(["toggleAuthModal"]),
 		signOut() {
-			this.$store.dispatch("signOut");
+			this.$store.dispatch("sign_out");
 			if (this.$route.meta.requiresAuth) {
 				this.$router.push({ name: "home" });
 			}

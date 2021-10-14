@@ -92,6 +92,7 @@ export default {
 			//EXECUTE IF LOG IN IS SUBMITTED
 			(this.login_in_submission = false), (this.login_alert_variant = "bg-green-500");
 			this.login_alert_msg = "Logged in!";
+			window.location.reload();
 		},
 	},
 };
