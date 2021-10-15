@@ -31,9 +31,10 @@
 			>
 				<h5>Drop your files here</h5>
 			</div>
+			<input type="file" multiple @change="upload" />
 			<hr class="my-6" />
 			<!-- Progess Bars -->
-			<div class="mb-4" v-for="upload in uploads" :key="upload.name">
+			<div class="mb-4" v-for="(upload, index) in uploads" :key="upload.name">
 				<!-- File Name -->
 				<div class="font-bold text-sm" :class="upload.text_class">
 					<i :class="upload.icon"></i>{{ upload.name }}
@@ -42,7 +43,7 @@
 					<!-- Inner Progress Bar -->
 					<div
 						class="transition-all progress-bar bg-blue-400"
-						:class="uploads[uploadIndex].variant"
+						:class="uploads[index].variant"
 						:style="{ width: upload.current_progress + '%' }"
 					></div>
 				</div>
@@ -52,10 +53,22 @@
 </template>
 
 <script>
-import { storage } from "@/includes/firebase";
-import { ref, uploadBytesResumable } from "firebase/storage";
+import { storage, auth, addSongCollection } from "@/includes/firebase";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 export default {
 	name: "FileUploader",
+	props: {
+		songData: {
+			type: Object,
+			required: true,
+			default: function () {
+				return {
+					title: "",
+					genre: "",
+				};
+			},
+		},
+	},
 	data() {
 		return {
 			is_dragover: false,
@@ -65,7 +78,7 @@ export default {
 	methods: {
 		upload($event) {
 			this.is_dragover = false;
-			const files = [...$event.dataTransfer.files];
+			const files = $event.dataTransfer ? [...$event.dataTransfer.files] : [...$event.target.files];
 			files.forEach((file) => {
 				if (file.type !== "audio/mpeg") {
 					return;
@@ -93,8 +106,19 @@ export default {
 						this.uploads[uploadIndex].icon = "fas fa-times";
 						this.uploads[uploadIndex].text_class = "text-red-400";
 					},
-					() => {
-						console.log(this.uploads[uploadIndex].variant);
+					async () => {
+						const song = {
+							uid: auth.currentUser.uid,
+							//display_name: auth.currentUser.displayName,
+							original_name: task.snapshot.ref.name,
+							modified_name: this.songData.title,
+							genre: this.songData.genre,
+							comment_count: 0,
+							url: "",
+						};
+						song.url = await getDownloadURL(ref(storage, task.snapshot.ref.fullPath));
+						console.log(song);
+						await addSongCollection(song);
 						this.uploads[uploadIndex].variant = "bg-green-400";
 						this.uploads[uploadIndex].icon = "fas fa-check";
 						this.uploads[uploadIndex].text_class = "text-green-400";
@@ -102,6 +126,11 @@ export default {
 				);
 			});
 		},
+	},
+	beforeUnmount() {
+		this.uploads.forEach((upload) => {
+			upload.task.cancel();
+		});
 	},
 };
 </script>
