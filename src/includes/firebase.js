@@ -1,10 +1,13 @@
 import { initializeApp } from "firebase/app";
-import "firebase/auth";
-import { getFirestore, collection, doc, getDocs, setDoc } from "firebase/firestore";
-import { firebaseConfig } from "./firebaseConfig.js"; // Created only to be placed in .gitignore
+import { getAuth } from "firebase/auth";
+import { getFirestore, collection, doc, getDocs, setDoc, addDoc, query, where } from "firebase/firestore";
+import { firebaseConfig } from "./firebaseConfig.js";
+// Created only to be placed in .gitignore
 import { getStorage } from "firebase/storage";
 const firebase = initializeApp(firebaseConfig);
 const db = getFirestore(firebase);
+const storage = getStorage(firebase);
+const auth = getAuth();
 const getUsersCollection = () => {
 	let actualDoc;
 	getDocs(collection(db, "users")).then((doc) =>
@@ -16,7 +19,6 @@ const getUsersCollection = () => {
 	);
 	return actualDoc;
 };
-const storage = getStorage(firebase);
 /*Input will be like this
 {
   name: "name",
@@ -32,4 +34,27 @@ const addUsersCollection = (usersData, key = usersData.email) => {
 	});
 };
 
-export { getUsersCollection, addUsersCollection, storage };
+const getSongCollection = () => {
+	const songsRef = collection(db, "songs");
+	const q = query(songsRef, where("uid", "==", auth.currentUser.uid));
+	const reVal = getDocs(q);
+	return reVal;
+
+	// let actualDoc;
+	// getDocs(collection(db, "songs")).then((doc) =>
+	//   doc.forEach((doc) => {
+	//     actualDoc = doc;
+	//     return;
+	//   })
+	// );
+	// return actualDoc;
+};
+
+const addSongCollection = (songData) => {
+	addDoc(collection(db, "songs"), {
+		...songData,
+	});
+};
+
+export { getUsersCollection, addUsersCollection, getSongCollection, addSongCollection, storage, auth };
+//Vue 13-20
