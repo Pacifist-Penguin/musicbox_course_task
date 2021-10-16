@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore, collection, doc, getDocs, setDoc, addDoc, query, where } from "firebase/firestore";
+import { getFirestore, collection, doc, getDocs, setDoc, addDoc, query, where, updateDoc } from "firebase/firestore";
 import { firebaseConfig } from "./firebaseConfig.js";
 // Created only to be placed in .gitignore
 import { getStorage } from "firebase/storage";
@@ -56,5 +56,9 @@ const addSongCollection = (songData) => {
 	});
 };
 
-export { getUsersCollection, addUsersCollection, getSongCollection, addSongCollection, storage, auth };
-//Vue 13-20
+const editSongDocument = (songRef, newProperties) => {
+	updateDoc(songRef, newProperties)
+}
+
+export { getUsersCollection, addUsersCollection, getSongCollection, addSongCollection, editSongDocument, storage, auth };
+//Vue 13-22

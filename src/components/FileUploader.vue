@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { storage, auth, addSongCollection } from "@/includes/firebase";
+import { storage, auth, addSongCollection, editSongDocument } from "@/includes/firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 export default {
 	name: "FileUploader",
@@ -68,6 +68,7 @@ export default {
 				};
 			},
 		},
+		addSong,
 	},
 	data() {
 		return {
@@ -117,8 +118,8 @@ export default {
 							url: "",
 						};
 						song.url = await getDownloadURL(ref(storage, task.snapshot.ref.fullPath));
-						console.log(song);
-						await addSongCollection(song);
+						const songRef = await addSongCollection(song);
+						this.addSong(songRef)
 						this.uploads[uploadIndex].variant = "bg-green-400";
 						this.uploads[uploadIndex].icon = "fas fa-check";
 						this.uploads[uploadIndex].text_class = "text-green-400";
