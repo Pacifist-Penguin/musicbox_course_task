@@ -2,7 +2,7 @@
 	<section class="container mx-auto mt-6">
 		<div class="md:grid md:grid-cols-3 md:gap-4">
 			<div class="col-span-1">
-				<file-uploader :songData="songData" :addSong="addSong" />
+				<file-uploader @uploaded-song="addSong" :songData="songData" />
 			</div>
 			<div class="col-span-2">
 				<div class="bg-white rounded border border-gray-200 relative flex flex-col">
@@ -16,12 +16,11 @@
 							v-for="(song, index) in songs"
 							:song="song"
 							:key="song.docID"
-							:index="index"
-							:updateSong="updateSong"
-							@submit="submit"
+							:songIndex="index"
+							@update-name="updateSong"
+							@delete-song="deleteSong"
+							:updateUnsavedFlag="updateUnsavedFlag"
 						/>
-						<!-- It's considered to be a bad practice to pass functions through props. 
-						Made only for demonstration purposes  -->
 					</div>
 				</div>
 			</div>
@@ -43,25 +42,41 @@ export default {
 				genre: "",
 			},
 			songs: [],
+			unsavedFlag: false,
 		};
 	},
-	async created() {
-		const snapshot = await getSongCollection();
-		snapshot.forEach(this.addSong);
+	async mounted() {
+		this.addSong();
 	},
 	methods: {
-		updateSong(index, values) {
-			this.songs[index].modified_name = values.modified_name;
-			this.songs[index].genre = values.genre;
+		updateSong(updateObj) {
+			this.songs[updateObj.songIndex].modified_name = updateObj.modified_name;
+			this.songs[updateObj.songIndex].genre = updateObj.genre;
 		},
-		addSong(doc) {
-			const song = {
-				...doc.data(),
-				docID: doc.id,
-			};
-			console.log(song);
-			this.songs.push(song);
+		deleteSong(songID) {
+			this.songs.splice(songID, 1);
 		},
+		async addSong() {
+			const snapshot = await getSongCollection();
+			snapshot.forEach((doc) => {
+				const song = {
+					...doc.data(),
+					docID: doc.id,
+				};
+				this.songs.push(song);
+			});
+		},
+		updateUnsavedFlag(value) {
+			this.unsavedFlag = value;
+		},
+	},
+	beforeRouteLeave(to, from, next) {
+		if (!this.unsavedFlag) {
+			next();
+		} else {
+			const answer = confirm("U have unsaved changes, are u sure u want to leave?");
+			next(answer);
+		}
 	},
 };
 </script>
