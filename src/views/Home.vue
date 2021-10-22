@@ -1,29 +1,28 @@
 <template>
-	<!-- Introduction -->
-	<nav-intro />
+	<main>
+		<!-- Introduction -->
+		<nav-intro />
 
-	<!-- Main Content -->
-	<section class="container mx-auto">
-		<div class="bg-white rounded border border-gray-200 relative flex flex-col">
-			<div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
-				<span class="card-title">Songs</span>
-				<!-- Icon -->
-				<i class="fa fa-headphones-alt float-right text-green-400 text-xl"></i>
+		<!-- Main Content -->
+		<section class="container mx-auto">
+			<div class="bg-white rounded border border-gray-200 relative flex flex-col">
+				<div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200" v-icon:full="'headphones-alt'">
+					<span class="card-title">Songs</span>
+				</div>
+				<!-- Playlist -->
+				<ol id="playlist">
+					<song-item v-for="song in songs" :key="song.docID" :song="song" />
+				</ol>
+				<!-- end Playlist -->
 			</div>
-			<!-- Playlist -->
-			<ol id="playlist">
-				<song-item v-for="song in songs" :key="song.docID" :song="song" />
-			</ol>
-			<!-- end Playlist -->
-		</div>
-	</section>
+		</section>
+	</main>
 </template>
 
 <script>
 import NavIntro from "@/components/NavIntro.vue";
 import SongItem from "@/components/SongItem.vue";
-import { getAllSongsCollection, getPaginatedSongs, getDocByID, db, updatePaginatedSongs } from "@/includes/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { getPaginatedSongs, updatePaginatedSongs } from "@/includes/firebase";
 export default {
 	name: "Home",
 	components: {
