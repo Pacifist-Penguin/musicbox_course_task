@@ -5,12 +5,17 @@ import {
 	collection,
 	doc,
 	getDocs,
+	getDoc,
 	setDoc,
 	addDoc,
 	updateDoc,
 	deleteDoc,
 	query,
+	startAfter,
+	startAt,
+	orderBy,
 	where,
+	limit,
 } from "firebase/firestore";
 import { firebaseConfig } from "./firebaseConfig.js";
 // Created only to be placed in .gitignore
@@ -19,27 +24,36 @@ const firebase = initializeApp(firebaseConfig);
 const db = getFirestore(firebase);
 const storage = getStorage(firebase);
 const auth = getAuth();
+const commentsCollection = collection(db, "comments");
+
+const addCommentsCollection = (comment) => {
+	return addDoc(commentsCollection, {
+		...comment,
+	});
+};
+
+const incrementAmountOfComments = (songUID, commentCount) => {
+	const exactSong = doc(db, "songs", songUID);
+	return updateDoc(exactSong, { comment_count: commentCount });
+};
+
+const getCommentsCollection = (songUID) => {
+	const q = query(commentsCollection, where("sid", "==", songUID));
+	return getDocs(q);
+};
+
 const getUsersCollection = () => {
 	let actualDoc;
 	getDocs(collection(db, "users")).then((doc) =>
 		doc.forEach((doc) => {
-			console.log(doc);
 			actualDoc = doc;
 			return;
 		})
 	);
 	return actualDoc;
 };
-/*Input will be like this
-{
-  name: "name",
-  email: "email",
-  age: "age",
-  country: "country",
-  }
-*/
+
 const addUsersCollection = (usersData, key = usersData.email) => {
-	console.log(usersData);
 	setDoc(doc(db, "users", key), {
 		...usersData,
 	});
@@ -61,9 +75,23 @@ const getSongRef = (original_name) => {
 	const songRef = collection(db, "songs");
 	const q = query(songRef, where("original_name", "==", original_name));
 	const reVal = getDocs(q)[0];
-	console.log(reVal);
 	return reVal;
 };
+
+const updatePaginatedSongs = (lastDoc, countOfSongs = 1) => {
+	const songRef = collection(db, "songs");
+	let q = query(songRef, orderBy("docID"), startAfter(lastDoc), limit(countOfSongs));
+	const reVal = getDocs(q);
+	return reVal;
+};
+
+const getPaginatedSongs = (countOfSongs = 3) => {
+	const songRef = collection(db, "songs");
+	let q = query(songRef, orderBy("modified_name"), limit(countOfSongs));
+	const reVal = getDocs(q);
+	return reVal;
+};
+
 const updateSongDoc = (songUID, fieldsValue) => {
 	const exactSong = doc(db, "songs", songUID);
 	return updateDoc(exactSong, fieldsValue);
@@ -81,10 +109,19 @@ const deleteSongDoc = (songUID) => {
 };
 
 const deleteSongFromStorage = (songOriginalName) => {
-	console.log(songOriginalName);
 	const songRef = ref(storage, `songs/${songOriginalName}`);
 	return deleteObject(songRef);
 };
+
+const getSongByDocID = (docID) => {
+	const docRef = doc(db, "songs", docID);
+	return getDoc(docRef);
+};
+
+// const increaseCommentCount = (songUID) => {
+//   const exactSong = doc(db, "songs", songUID);
+//   return updateDoc(exactSong, fieldsValue);
+// };
 
 export {
 	getUsersCollection,
@@ -92,6 +129,9 @@ export {
 	getAllSongsCollection,
 	getSongCollection,
 	getSongRef,
+	getSongByDocID,
+	getPaginatedSongs,
+	updatePaginatedSongs,
 	addSongCollection,
 	updateSongDoc,
 	deleteSongDoc,
@@ -99,5 +139,9 @@ export {
 	storage,
 	auth,
 	db,
+	commentsCollection,
+	addCommentsCollection,
+	getCommentsCollection,
+	incrementAmountOfComments,
 };
-//Vue 14-1
+//Vue 14-19

@@ -193,7 +193,6 @@ export default {
 			this.reg_alert_msg = "Please wait! Your account is being created.";
 			let userCredentials;
 			try {
-				console.log(values);
 				await this.$store.dispatch("register", values);
 			} catch (error) {
 				this.reg_in_submission = false;
