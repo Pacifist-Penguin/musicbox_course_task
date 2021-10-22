@@ -118,11 +118,6 @@ const getSongByDocID = (docID) => {
 	return getDoc(docRef);
 };
 
-// const increaseCommentCount = (songUID) => {
-//   const exactSong = doc(db, "songs", songUID);
-//   return updateDoc(exactSong, fieldsValue);
-// };
-
 export {
 	getUsersCollection,
 	addUsersCollection,
@@ -144,4 +139,4 @@ export {
 	getCommentsCollection,
 	incrementAmountOfComments,
 };
-//Vue 14-19
+//Vue 15-3
