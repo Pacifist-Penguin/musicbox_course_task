@@ -139,4 +139,4 @@ export {
 	getCommentsCollection,
 	incrementAmountOfComments,
 };
-//Vue 15-3
+//Vue 17-4
