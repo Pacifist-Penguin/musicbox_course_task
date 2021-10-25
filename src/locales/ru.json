@@ -1,0 +1,15 @@
+{
+	"home": {
+		"listen": "Слушайте крутую музыку!"
+	},
+	"manage": {
+		"my_songs": "Мои треки"
+	},
+	"register": {
+		"TOS": "",
+		"accept": ""
+	},
+	"song": {
+		"comment_count": ""
+	}
+}

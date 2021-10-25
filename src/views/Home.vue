@@ -6,7 +6,10 @@
 		<!-- Main Content -->
 		<section class="container mx-auto">
 			<div class="bg-white rounded border border-gray-200 relative flex flex-col">
-				<div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200" v-icon:full="'headphones-alt'">
+				<div
+					class="px-6 pt-6 pb-5 font-bold border-b border-gray-200"
+					v-icon-secondary="{ icon: 'headphones-alt', right: true }"
+				>
 					<span class="card-title">Songs</span>
 				</div>
 				<!-- Playlist -->
@@ -23,11 +26,16 @@
 import NavIntro from "@/components/NavIntro.vue";
 import SongItem from "@/components/SongItem.vue";
 import { getPaginatedSongs, updatePaginatedSongs } from "@/includes/firebase";
+import IconSecondary from "@/directives/icon-secondary";
+
 export default {
 	name: "Home",
 	components: {
 		NavIntro,
 		SongItem,
+	},
+	directives: {
+		"icon-secondary": IconSecondary,
 	},
 	data() {
 		return {
