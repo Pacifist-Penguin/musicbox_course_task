@@ -49,11 +49,11 @@ import { mapActions, mapGetters, mapState } from "vuex";
 export default {
 	name: "AudioPlayer",
 	methods: {
-		...mapActions(["toggleAudio", "updateSeek"]),
+		...mapActions("player", ["toggleAudio", "updateSeek"]),
 	},
 	computed: {
-		...mapGetters(["playing"]),
-		...mapState(["seek", "duration", "playerProgress", "currentSong"]),
+		...mapGetters("player", ["playing"]),
+		...mapState("player", ["seek", "duration", "playerProgress", "currentSong"]),
 	},
 };
 </script>

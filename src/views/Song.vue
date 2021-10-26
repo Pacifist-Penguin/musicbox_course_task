@@ -29,7 +29,9 @@
 				<div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
 					<!-- Comment Count -->
 					<span class="card-title">{{
-						$tc("song.comment_count", song.comment_count, { count: song.comment_count })
+						$tc("song.comment_count", song.comment_count, {
+							count: song.comment_count,
+						})
 					}}</span>
 					<i class="fa fa-comments float-right text-green-400 text-2xl"></i>
 				</div>
@@ -113,7 +115,8 @@ import {
 	incrementAmountOfComments,
 } from "@/includes/firebase.js";
 import CommentItem from "@/components/CommentItem.vue";
-import { mapState, mapActions } from "vuex";
+import { mapActions } from "vuex";
+import { vModelText } from "@vue/runtime-dom";
 
 export default {
 	components: { CommentItem },
@@ -132,23 +135,26 @@ export default {
 			sort: "1",
 		};
 	},
-	async created() {
-		const song = await getSongByDocID(this.$route.params.id);
-		const songData = song.data();
-		if (!songData) {
-			this.$router.push({ name: "home" });
-			return;
-		}
+	async beforeRouteEnter(to, from, next) {
+		const song = await getSongByDocID(to.params.id);
 
-		const { sort } = this.$route.query;
+		next((vm) => {
+			const songData = song.data();
+			if (!songData) {
+				vm.$router.push({ name: "home" });
+				return;
+			}
 
-		this.sort = sort === "1" || sort === "2" ? sort : "1";
+			const { sort } = vm.$route.query;
 
-		this.song = songData;
-		this.getComments();
+			vm.sort = sort === "1" || sort === "2" ? sort : "1";
+
+			vm.song = songData;
+			vm.getComments();
+		});
 	},
 	methods: {
-		...mapActions(["newSong"]),
+		...mapActions("player", ["newSong"]),
 		async addComment(values, { resetForm }) {
 			this.comment_in_submission = true;
 			this.comment_show_alert = true;
@@ -189,7 +195,9 @@ export default {
 		},
 	},
 	computed: {
-		...mapState(["userLoggedIn"]),
+		userLoggedIn() {
+			return this.$store.state.auth.userLoggedIn;
+		},
 		sortedComments() {
 			return this.comments.slice().sort((a, b) => {
 				if (this.sort === "1") {

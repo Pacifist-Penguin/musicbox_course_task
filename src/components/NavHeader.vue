@@ -51,7 +51,7 @@ import { mapMutations } from "vuex";
 export default {
 	name: "NavHeader",
 	methods: {
-		...mapMutations(["toggleAuthModal"]),
+		...mapMutations("auth", ["toggleAuthModal"]),
 		signOut() {
 			this.$store.dispatch("sign_out");
 			if (this.$route.meta.requiresAuth) {
@@ -64,7 +64,7 @@ export default {
 	},
 	computed: {
 		userLoggedIn() {
-			return this.$store.state.userLoggedIn;
+			return this.$store.state.auth.userLoggedIn;
 		},
 		currentLocale() {
 			return this.$i18n.locale === "ru" ? "Russian" : "English";

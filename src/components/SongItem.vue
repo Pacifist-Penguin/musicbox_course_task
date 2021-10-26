@@ -8,11 +8,7 @@
 		</div>
 
 		<div class="text-gray-600 text-lg">
-			<router-link
-				:to="{ name: 'song', params: { id: song.docID }, hash: '#comments' }"
-				custom
-				v-slot="{ navigate }"
-			>
+			<router-link :to="{ name: 'song', params: { id: song.docID }, hash: '#comments' }" custom>
 				<span class="comments" @click="navigate">
 					<i class="fa fa-comments text-gray-600"></i>
 					{{ song.comment_count }}
