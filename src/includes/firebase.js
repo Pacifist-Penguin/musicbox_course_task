@@ -12,16 +12,19 @@ import {
 	deleteDoc,
 	query,
 	startAfter,
-	startAt,
 	orderBy,
 	where,
 	limit,
+	enableIndexedDbPersistence,
 } from "firebase/firestore";
 import { firebaseConfig } from "./firebaseConfig.js";
 // Created only to be placed in .gitignore
 import { getStorage, ref, deleteObject } from "firebase/storage";
 const firebase = initializeApp(firebaseConfig);
 const db = getFirestore(firebase);
+enableIndexedDbPersistence(db).catch((error) => {
+	console.error(error.code);
+});
 const storage = getStorage(firebase);
 const auth = getAuth();
 const commentsCollection = collection(db, "comments");
@@ -139,4 +142,4 @@ export {
 	getCommentsCollection,
 	incrementAmountOfComments,
 };
-//Vue 17-4
+//Vue 20-10

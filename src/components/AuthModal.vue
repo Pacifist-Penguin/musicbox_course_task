@@ -81,13 +81,17 @@ export default {
 		};
 	},
 	computed: {
+		// authModalShowed() {
+		//   return this.$store.state.authModalShowed;
+		// },
 		authModalShowed() {
-			return this.$store.state.authModalShowed;
+			console.log(this.$store.state.auth.authModalShowed);
+			return this.$store.state.auth.authModalShowed;
 		},
 	},
 	methods: {
 		toggleAuthModal() {
-			this.$store.commit("toggleAuthModal");
+			this.$store.commit("auth/toggleAuthModal");
 		},
 	},
 };

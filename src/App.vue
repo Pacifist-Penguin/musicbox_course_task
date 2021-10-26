@@ -26,7 +26,7 @@ export default {
 		AudioPlayer,
 	},
 	created() {
-		this.$store.dispatch("init_login");
+		this.$store.dispatch("auth/init_login");
 	},
 };
 </script>
