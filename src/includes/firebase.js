@@ -45,17 +45,6 @@ const getCommentsCollection = (songUID) => {
 	return getDocs(q);
 };
 
-const getUsersCollection = () => {
-	let actualDoc;
-	getDocs(collection(db, "users")).then((doc) =>
-		doc.forEach((doc) => {
-			actualDoc = doc;
-			return;
-		})
-	);
-	return actualDoc;
-};
-
 const addUsersCollection = (usersData, key = usersData.email) => {
 	setDoc(doc(db, "users", key), {
 		...usersData,
@@ -67,11 +56,6 @@ const getSongCollection = () => {
 	const q = query(songsRef, where("uid", "==", auth.currentUser.uid));
 	const reVal = getDocs(q);
 	return reVal;
-};
-
-const getAllSongsCollection = () => {
-	const songs = collection(db, "songs");
-	return getDocs(songs);
 };
 
 const getSongRef = (original_name) => {
@@ -122,9 +106,7 @@ const getSongByDocID = (docID) => {
 };
 
 export {
-	getUsersCollection,
 	addUsersCollection,
-	getAllSongsCollection,
 	getSongCollection,
 	getSongRef,
 	getSongByDocID,
