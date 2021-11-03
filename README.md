@@ -1,4 +1,4 @@
-# yarning
+# musicbox_course_task
 
 ## Project setup
 
