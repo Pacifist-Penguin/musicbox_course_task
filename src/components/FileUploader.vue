@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { storage, auth, addSongCollection, getSongRef } from "@/includes/firebase";
+import { storage, auth, addSongCollection } from "@/includes/firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 export default {
 	name: "FileUploader",
@@ -112,7 +112,7 @@ export default {
 						const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 						this.uploads[uploadIndex].current_progress = progress;
 					},
-					(error) => {
+					() => {
 						this.uploads[uploadIndex].variant = "bg-red-400";
 						this.uploads[uploadIndex].icon = "fas fa-times";
 						this.uploads[uploadIndex].text_class = "text-red-400";
