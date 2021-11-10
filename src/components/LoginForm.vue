@@ -58,7 +58,6 @@
 </template>
 
 <script>
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 export default {
 	data() {
