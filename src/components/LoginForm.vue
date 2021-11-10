@@ -82,7 +82,6 @@ export default {
 			try {
 				await this.$store.dispatch("login", values);
 			} catch {
-				console.log("totobad");
 				this.login_alert_variant = "bg-red-500";
 				(this.login_in_submission = false), (this.login_alert_msg = "Error occured!!");
 				return;
