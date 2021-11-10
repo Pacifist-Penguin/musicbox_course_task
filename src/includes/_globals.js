@@ -7,8 +7,6 @@ export default {
 		baseComponents.keys().forEach((fileName) => {
 			const componentConfig = baseComponents(fileName);
 			const componentName = _.upperFirst(_.camelCase(fileName.replace(/^\.\//, "").replace(/\.\w+$/, "")));
-			console.log(fileName, componentName);
-
 			app.component(`Base${componentName}`, componentConfig.default || componentConfig);
 		});
 	},

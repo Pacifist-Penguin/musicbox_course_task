@@ -117,7 +117,6 @@ import {
 } from "@/includes/firebase.js";
 import CommentItem from "@/components/CommentItem.vue";
 import { mapActions } from "vuex";
-import { vModelText } from "@vue/runtime-dom";
 
 export default {
 	components: { CommentItem },

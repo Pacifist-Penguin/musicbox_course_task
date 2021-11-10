@@ -2,8 +2,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import store from "@/store";
 
 const Home = () => import("@/views/Home.vue");
-const Manage = () => import(/* webpackChunkName: "groupedChunk" */ "@/views/Manage.vue");
-const Song = () => import(/* webpackChunkName: "groupedChunk" */ "@/views/Song.vue");
+const Manage = () => import("@/views/Manage.vue");
+const Song = () => import("@/views/Song.vue");
 const About = () => import("@/views/About.vue");
 
 const routes = [
@@ -25,17 +25,9 @@ const routes = [
 		},
 		component: Manage,
 		beforeEnter: (to, from, next) => {
-			console.log("manage guard");
-
 			next();
 		},
 	},
-	// {
-	//   name: "manage",
-	//   alias: "/manage",
-	//   path: "/manage-music",
-	//   component: Manage
-	// },
 	{
 		path: "/manage",
 		redirect: { name: "manage" },

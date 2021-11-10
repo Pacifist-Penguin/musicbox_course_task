@@ -22,9 +22,8 @@ import { firebaseConfig } from "./firebaseConfig.js";
 import { getStorage, ref, deleteObject } from "firebase/storage";
 const firebase = initializeApp(firebaseConfig);
 const db = getFirestore(firebase);
-enableIndexedDbPersistence(db).catch((error) => {
-	console.error(error.code);
-});
+enableIndexedDbPersistence(db);
+
 const storage = getStorage(firebase);
 const auth = getAuth();
 const commentsCollection = collection(db, "comments");

@@ -193,7 +193,6 @@ export default {
 			this.reg_in_submission = true;
 			this.reg_alert_variant = "bg-blue-500";
 			this.reg_alert_msg = "Please wait! Your account is being created.";
-			let userCredentials;
 			try {
 				await this.$store.dispatch("register", values);
 			} catch (error) {
