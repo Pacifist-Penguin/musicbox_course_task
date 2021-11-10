@@ -85,7 +85,6 @@ export default {
 		//   return this.$store.state.authModalShowed;
 		// },
 		authModalShowed() {
-			console.log(this.$store.state.auth.authModalShowed);
 			return this.$store.state.auth.authModalShowed;
 		},
 	},
